@@ -38,7 +38,6 @@
             nixd
             statix
             deadnix
-            sqlx-cli
           ];
           RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
         };
