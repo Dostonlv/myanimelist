@@ -1,0 +1,9 @@
+pub mod anime_genres;
+pub mod anime_studios;
+pub mod animes;
+pub mod genres;
+pub mod studios;
+pub mod users;
+pub mod reviews;
+pub mod anime_list;
+pub mod favorites;

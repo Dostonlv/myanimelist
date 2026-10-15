@@ -38,6 +38,7 @@
             nixd
             statix
             deadnix
+            taplo
           ];
           RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
         };
