@@ -21,6 +21,8 @@ pub struct Model {
     pub duration_min: i32,
     pub rating: f32,
     pub image_url: String,
+
+    #[sea_orm(default = "chrono::Utc::now()")]
     pub created_at: chrono::NaiveDateTime,
 }
 
