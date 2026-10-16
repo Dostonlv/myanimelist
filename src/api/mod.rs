@@ -2,7 +2,7 @@ pub mod anime;
 
 use std::sync::Arc;
 
-use aide::{axum::routing::get, openapi::OpenApi, swagger::Swagger};
+use aide::openapi::OpenApi;
 use axum::{Extension, Router};
 use tower_http::cors;
 

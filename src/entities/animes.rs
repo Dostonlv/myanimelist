@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 use utility_types::Pick;
@@ -6,7 +7,7 @@ use utility_types::Pick;
 #[pick(arg(ident = CreateAnime, fields(title, title_english,title_japanese,r#type, synopsis,episodes,status,aired_from,season,year,source,duration_min,rating,image_url), forward_attrs()))]
 #[pick(arg(ident = UpdateAnime, fields(title, title_english,title_japanese,r#type, synopsis,episodes,status,aired_from,season,year,source,duration_min,rating,image_url), forward_attrs()))]
 #[sea_orm::model]
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize, JsonSchema)]
 #[sea_orm(table_name = "anime")]
 pub struct Model {
     #[sea_orm(primary_key)]
@@ -30,15 +31,24 @@ pub struct Model {
 
     #[sea_orm(default_expr = "Expr::current_timestamp()")]
     pub created_at: chrono::NaiveDateTime,
-
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(has_many)]
     pub anime_list: HasMany<super::anime_list::Entity>,
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(has_many)]
     pub reviews: HasMany<super::reviews::Entity>,
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(has_many)]
     pub favorites: HasMany<super::favorites::Entity>,
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(has_many, via = "anime_genres")]
     pub genres: HasMany<super::genres::Entity>,
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(has_many, via = "anime_studios")]
     pub studios: HasMany<super::studios::Entity>,
 }

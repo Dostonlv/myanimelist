@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 use utility_types::Pick;
@@ -6,7 +7,7 @@ use utility_types::Pick;
 #[pick(arg(ident = CreateUser, fields(username, email, password, avatar_url, about), forward_attrs()))]
 #[pick(arg(ident = UpdateUser, fields(id, username, email, password, avatar_url, about), forward_attrs()))]
 #[sea_orm::model]
-#[derive(DeriveEntityModel, Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[derive(DeriveEntityModel, Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
 #[sea_orm(table_name = "users")]
 pub struct Model {
     #[sea_orm(primary_key)]
@@ -22,11 +23,16 @@ pub struct Model {
 
     #[sea_orm(default_expr = "Expr::current_timestamp()")]
     pub created_at: chrono::NaiveDateTime,
-
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(has_many)]
     pub anime_list: HasMany<super::anime_list::Entity>,
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(has_many)]
     pub reviews: HasMany<super::reviews::Entity>,
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(has_many)]
     pub favorites: HasMany<super::favorites::Entity>,
 }

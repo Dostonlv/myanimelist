@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use aide::{
-    axum::{ApiRouter, IntoApiResponse, routing::{get, post_with}}, openapi::OpenApi, swagger::Swagger,
+    axum::{ApiRouter, IntoApiResponse, routing::get}, openapi::OpenApi, swagger::Swagger,
 };
 use axum::{Extension, Json, response::IntoResponse};
 

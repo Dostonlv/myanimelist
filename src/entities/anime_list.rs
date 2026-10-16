@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use sea_orm::ActiveValue::Set;
 use sea_orm::entity::prelude::*;
 use sea_orm_migration::async_trait::async_trait;
@@ -8,7 +9,7 @@ use utility_types::Pick;
 #[pick(arg(ident = CreateAnimeList, fields(user_id, anime_id,status, score, episodes_watched, start_date,finish_date,rewatching,times_rewatched,tags,comments), forward_attrs()))]
 #[pick(arg(ident = UpdateAnimeList, fields(id,user_id, anime_id,status, score, episodes_watched, start_date,finish_date,rewatching,times_rewatched,tags,comments), forward_attrs()))]
 #[sea_orm::model]
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize, JsonSchema)]
 #[sea_orm(table_name = "anime_list")]
 pub struct Model {
     #[sea_orm(primary_key)]
@@ -31,8 +32,12 @@ pub struct Model {
     #[sea_orm(default_expr = "Expr::current_timestamp()")]
     pub updated_at: chrono::NaiveDateTime,
 
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(belongs_to, from = "user_id", to = "id")]
     pub user: BelongsTo<super::users::Entity>,
+    #[serde(skip)]
+    #[schemars(skip)]
     #[sea_orm(belongs_to, from = "anime_id", to = "id")]
     pub anime: BelongsTo<super::animes::Entity>,
 }
