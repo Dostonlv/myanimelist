@@ -1,7 +1,11 @@
 use sea_orm::entity::prelude::*;
-
+use serde::{Deserialize, Serialize};
+use utility_types::Pick;
+#[derive(Pick)]
+#[pick(arg(ident = CreateAnimeGenre, fields(anime_id, genre_id), forward_attrs()))]
+#[pick(arg(ident = UpdateAnimeGenre, fields(anime_id, genre_id), forward_attrs()))]
 #[sea_orm::model]
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
+#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Deserialize, Serialize)]
 #[sea_orm(table_name = "anime_genres")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]

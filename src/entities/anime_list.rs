@@ -1,25 +1,14 @@
-use sea_orm::entity::prelude::*;
 use sea_orm::ActiveValue::Set;
+use sea_orm::entity::prelude::*;
 use sea_orm_migration::async_trait::async_trait;
+use serde::{Deserialize, Serialize};
 use utility_types::{Omit, Pick};
 
+#[derive(Pick)]
+#[pick(arg(ident = CreateAnimeList, fields(user_id, anime_id,status, score, episodes_watched, start_date,finish_date,rewatching,times_rewatched,tags,comments), forward_attrs()))]
+#[pick(arg(ident = UpdateAnimeList, fields(id,user_id, anime_id,status, score, episodes_watched, start_date,finish_date,rewatching,times_rewatched,tags,comments), forward_attrs()))]
 #[sea_orm::model]
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
-#[sea_orm(model_attrs(
-    derive(Omit, Pick),
-    omit(arg(
-        ident = CreateAnimeListEntry,
-        fields(id, updated_at),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    )),
-    omit(arg(
-        ident = UpdateAnimeListEntry,
-        fields(user_id, anime_id, updated_at),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    ))
-))]
+#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "anime_list")]
 pub struct Model {
     #[sea_orm(primary_key)]

@@ -1,27 +1,13 @@
 use schemars::JsonSchema;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
-use substruct::substruct;
 use utility_types::{Omit, Pick};
 
-
+#[derive(Pick)]
+#[pick(arg(ident = CreateAnime, fields(title, title_english,title_japanese,r#type, synopsis,episodes,status,aired_from,season,year,source,duration_min,rating,image_url), forward_attrs()))]
+#[pick(arg(ident = UpdateAnime, fields(title, title_english,title_japanese,r#type, synopsis,episodes,status,aired_from,season,year,source,duration_min,rating,image_url), forward_attrs()))]
 #[sea_orm::model]
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
-#[sea_orm(model_attrs(
-    derive(Omit, Pick),
-    omit(arg(
-        ident = CreateAnime,
-        fields(id, created_at),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    ),
-    arg(
-        ident = UpdateAnime,
-        fields(created_at),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    ))
-))]
+#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "anime")]
 pub struct Model {
     #[sea_orm(primary_key)]
