@@ -1,9 +1,10 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
-use utility_types::{Omit, Pick};
+use utility_types::Pick;
 
 #[derive(Pick)]
-#[pick(arg(ident = SomethingSomething, fields(username, email,password,avatar_url, about), forward_attrs()))]
+#[pick(arg(ident = CreateUser, fields(username, email, password, avatar_url, about), forward_attrs()))]
+#[pick(arg(ident = UpdateUser, fields(id, username, email, password, avatar_url, about), forward_attrs()))]
 #[sea_orm::model]
 #[derive(DeriveEntityModel, Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
 #[sea_orm(table_name = "users")]

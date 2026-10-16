@@ -1,23 +1,12 @@
 use sea_orm::entity::prelude::*;
-use utility_types::{Omit, Pick};
+use serde::{Deserialize, Serialize};
+use utility_types::Pick;
 
+#[derive(Pick)]
+#[pick(arg(ident = CreateGenre, fields(name), forward_attrs()))]
+#[pick(arg(ident = UpdateGenre, fields(id, name), forward_attrs()))]
 #[sea_orm::model]
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
-#[sea_orm(model_attrs(
-    derive(Omit, Pick),
-    omit(arg(
-        ident = CreateGenre,
-        fields(id),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    )),
-    pick(arg(
-        ident = UpdateGenre,
-        fields(id, name),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    ))
-))]
+#[derive(DeriveEntityModel, Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
 #[sea_orm(table_name = "genres")]
 pub struct Model {
     #[sea_orm(primary_key)]

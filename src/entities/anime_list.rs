@@ -2,7 +2,7 @@ use sea_orm::ActiveValue::Set;
 use sea_orm::entity::prelude::*;
 use sea_orm_migration::async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use utility_types::{Omit, Pick};
+use utility_types::Pick;
 
 #[derive(Pick)]
 #[pick(arg(ident = CreateAnimeList, fields(user_id, anime_id,status, score, episodes_watched, start_date,finish_date,rewatching,times_rewatched,tags,comments), forward_attrs()))]

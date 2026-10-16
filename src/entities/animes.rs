@@ -1,7 +1,6 @@
-use schemars::JsonSchema;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
-use utility_types::{Omit, Pick};
+use utility_types::Pick;
 
 #[derive(Pick)]
 #[pick(arg(ident = CreateAnime, fields(title, title_english,title_japanese,r#type, synopsis,episodes,status,aired_from,season,year,source,duration_min,rating,image_url), forward_attrs()))]
