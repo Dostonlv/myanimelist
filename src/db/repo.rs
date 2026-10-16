@@ -34,3 +34,12 @@ pub struct Repo<E: EntityTrait> {
     db: DbConn,
     _entity: PhantomData<E>,
 }
+
+impl<E: EntityTrait> Repo<E> {
+    pub fn new(db: DbConn) -> Self {
+        Self {
+            db,
+            _entity: PhantomData,
+        }
+    }
+}
