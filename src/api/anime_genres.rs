@@ -6,7 +6,7 @@ use axum::{Json, http::StatusCode};
 
 use crate::{
     State,
-    api::{AppResponse, extractor::Authorized},
+    api::AppResponse,
     entities::animes::{CreateAnime, Model},
 };
 
