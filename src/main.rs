@@ -1,7 +1,14 @@
-use sea_orm::Database;
 
+use anyhow::Context;
+use sea_orm::{Database, DatabaseConnection};
+
+pub mod api;
 pub mod db;
 pub mod entities;
+#[derive(Clone, Debug)]
+pub struct State {
+    pub db_conn: DatabaseConnection,
+}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -18,9 +25,20 @@ async fn main() -> anyhow::Result<()> {
         .sync(&db)
         .await?;
 
+    let state = State { db_conn: db };
+    let app = api::create_app(state).await?;
+    let address = String::from("127.0.0.1:8080");
+    let listener = tokio::net::TcpListener::bind(&address)
+        .await
+        .context("Failed to listen")?;
+
+    tracing::info!("Listening on http://{address}");
+
+    axum::serve(listener, app)
+        .await
+        .context("Failed to serve app")?;
+
     // TODO: close connection on graceful shutdown
 
     Ok(())
 }
-
-

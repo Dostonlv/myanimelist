@@ -1,29 +1,11 @@
 use sea_orm::entity::prelude::*;
+use serde::{Deserialize, Serialize};
 use utility_types::{Omit, Pick};
 
+#[derive(Pick)]
+#[pick(arg(ident = SomethingSomething, fields(username, email,password,avatar_url, about), forward_attrs()))]
 #[sea_orm::model]
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
-#[sea_orm(model_attrs(
-    derive(Omit, Pick),
-    omit(arg(
-        ident = CreateUser,
-        fields(id, created_at),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    )),
-    pick(arg(
-        ident = UpdateUser,
-        fields(id, username, avatar_url, about),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    )),
-    pick(arg(
-        ident = UpdatePassword,
-        fields(id, password),
-        derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
-        forward_attrs()
-    ))
-))]
+#[derive(DeriveEntityModel, Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
 #[sea_orm(table_name = "users")]
 pub struct Model {
     #[sea_orm(primary_key)]

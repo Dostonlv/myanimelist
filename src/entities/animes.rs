@@ -1,5 +1,9 @@
+use schemars::JsonSchema;
 use sea_orm::entity::prelude::*;
+use serde::{Deserialize, Serialize};
+use substruct::substruct;
 use utility_types::{Omit, Pick};
+
 
 #[sea_orm::model]
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
@@ -10,8 +14,8 @@ use utility_types::{Omit, Pick};
         fields(id, created_at),
         derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
         forward_attrs()
-    )),
-    omit(arg(
+    ),
+    arg(
         ident = UpdateAnime,
         fields(created_at),
         derive(Debug, Clone, sea_orm::DeriveIntoActiveModel),
