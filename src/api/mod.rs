@@ -51,8 +51,8 @@ async fn serve_docs(Extension(api): Extension<Arc<OpenApi>>) -> impl IntoApiResp
     Json(api).into_response()
 }
 
-#[derive(Serialize, Debug, OperationIo, JsonSchema)]
-pub struct AppResponse<T: Serialize + JsonSchema> {
+#[derive(Serialize, Debug, OperationIo)]
+pub struct AppResponse<T: Serialize> {
     status_code: u16,
     message: String,
     data: Option<T>,
@@ -60,7 +60,7 @@ pub struct AppResponse<T: Serialize + JsonSchema> {
 
 impl<D> IntoResponse for AppResponse<D>
 where
-    D: Serialize + JsonSchema,
+    D: Serialize,
 {
     fn into_response(self) -> axum::response::Response {
         (

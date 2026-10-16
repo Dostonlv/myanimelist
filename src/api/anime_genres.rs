@@ -2,15 +2,16 @@ use aide::{
     axum::{ApiRouter, routing::post_with},
     transform::TransformOperation,
 };
-use axum::{Json, http::StatusCode};
+use axum::{Json, extract::State, http::StatusCode};
+use sea_orm::{ActiveModelTrait, DbBackend, IntoActiveModel, QueryTrait};
 
 use crate::{
-    State,
+    State as AppState,
     api::AppResponse,
-    entities::animes::{CreateAnime, Model},
+    entities::anime_genres::{CreateAnimeGenre, Model},
 };
 
-pub fn router(state: State) -> ApiRouter<State> {
+pub fn router(state: AppState) -> ApiRouter<AppState> {
     ApiRouter::new()
         .api_route(
             "/",
@@ -22,12 +23,31 @@ pub fn router(state: State) -> ApiRouter<State> {
 #[tracing::instrument]
 pub async fn create_anime_genres(
     // Authorized(_user): Authorized,
-    Json(_request): Json<CreateAnime>,
+    state: State<AppState>,
+    Json(request): Json<CreateAnimeGenre>,
 ) -> AppResponse<Model> {
-    AppResponse {
-        status_code: StatusCode::OK.as_u16(),
-        message: String::from("test"),
-        data: None,
+    let result = Model {
+        anime_id: request.anime_id,
+        genre_id: request.genre_id,
+    }
+    .into_active_model()
+    .insert(&state.db_conn)
+    .await;
+
+    match result {
+        Ok(genre) => AppResponse {
+            status_code: StatusCode::CREATED.as_u16(),
+            message: String::from("anime genre successfully created"),
+            data: Some(genre),
+        },
+        Err(err) => {
+            tracing::error!("create anime genre database error  {err}");
+            return AppResponse {
+                status_code: StatusCode::BAD_REQUEST.as_u16(),
+                message: String::from("failed while insert data to database"),
+                data: None,
+            };
+        }
     }
 }
 
