@@ -8,7 +8,7 @@ use crate::{State, api::extractor::Authorized, entities::animes::CreateAnime};
 
 pub fn router(state: State) -> ApiRouter<State> {
     ApiRouter::new()
-        .route("/", post_with(create_anime, create_anime_docs))
+        .api_route("/", post_with(create_anime, create_anime_docs))
         .with_state(state)
 }
 
