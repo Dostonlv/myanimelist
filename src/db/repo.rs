@@ -1,4 +1,8 @@
-use sea_orm::{ActiveModelTrait, DbErr, IntoActiveModel, sea_query::IntoCondition};
+use std::marker::PhantomData;
+
+use sea_orm::{
+    ActiveModelTrait, DbConn, DbErr, EntityTrait, IntoActiveModel, sea_query::IntoCondition,
+};
 use sea_orm_migration::async_trait::async_trait;
 
 #[async_trait]
@@ -22,4 +26,11 @@ pub trait Repository {
     async fn find(&self, cond: impl IntoCondition + Send) -> Result<Vec<Self::Model>, DbErr>;
 
     async fn delete_by_id(&self, id: Self::Id) -> Result<(), DbErr>;
+}
+
+// all repo has database connection and maybe has other field each other so for this i use phantom data
+
+pub struct Repo<E: EntityTrait> {
+    db: DbConn,
+    _entity: PhantomData<E>,
 }
