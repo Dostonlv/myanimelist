@@ -3,7 +3,7 @@ use anyhow::Context;
 use sea_orm::{Database, DatabaseConnection};
 
 pub mod api;
-pub mod db;
+// pub mod db;
 pub mod entities;
 #[derive(Clone, Debug)]
 pub struct State {

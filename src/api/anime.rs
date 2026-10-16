@@ -1,27 +1,25 @@
-use std::sync::Arc;
-
 use aide::{
-    axum::{ApiRouter, IntoApiResponse, routing::get}, openapi::OpenApi, swagger::Swagger,
+    axum::{ApiRouter, routing::post_with},
+    transform::TransformOperation,
 };
-use axum::{Extension, Json, response::IntoResponse};
+use axum::Json;
 
-use crate::State;
+use crate::{State, api::extractor::Authorized, entities::animes::CreateAnime};
 
 pub fn router(state: State) -> ApiRouter<State> {
     ApiRouter::new()
-        .route(
-            "/swagger",
-            get(Swagger::new("/api.json")
-                .with_title("Animes")
-                .axum_handler()),
-        )
-        .route("/api.json", get(serve_docs))
-        // .route("/", post_with(serve_docs))
+        .route("/", post_with(create_anime, create_anime_docs))
         .with_state(state)
 }
 
-async fn serve_docs(Extension(api): Extension<Arc<OpenApi>>) -> impl IntoApiResponse {
-    Json(api).into_response()
+#[tracing::instrument]
+pub async fn create_anime(
+    Authorized(_user): Authorized,
+    Json(_request): Json<CreateAnime>,
+) -> String {
+    "ok".to_string()
 }
 
-
+pub fn create_anime_docs(op: TransformOperation) -> TransformOperation {
+    op.tag("Anime")
+}
