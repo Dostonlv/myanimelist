@@ -1,17 +1,25 @@
-use sea_orm::{DbErr};
+use sea_orm::{ActiveModelTrait, DbErr, IntoActiveModel, sea_query::IntoCondition};
 use sea_orm_migration::async_trait::async_trait;
-
 
 #[async_trait]
 pub trait Repository {
     type Model;
-    type CreateDto;
-    type UpdateDto;
-    type FilterDto;
-    
-    async fn create(&self,dto: &Self::CreateDto) -> Result<Self::Model, DbErr>;
-    async fn get_by_id(&self, id: i64) -> Result<Self::Model, DbErr>;
-    async fn get_all(&self, filter: &Self::FilterDto) -> Result<Vec<Self::Model>, DbErr>;
-    async fn update(&self,dto: &Self::UpdateDto) -> Result<i64, DbErr>;
-    async fn delete(&self, id: i64) -> Result<(), DbErr>;
+    type ActiveModel: ActiveModelTrait;
+    type Id;
+
+    async fn insert(
+        &self,
+        dto: impl IntoActiveModel<Self::ActiveModel> + Send,
+    ) -> Result<Self::Model, DbErr>;
+
+    async fn update(
+        &self,
+        dto: impl IntoActiveModel<Self::ActiveModel> + Send,
+    ) -> Result<Self::Model, DbErr>;
+
+    async fn get_by_id(&self, id: Self::Id) -> Result<Self::Model, DbErr>;
+
+    async fn find(&self, cond: impl IntoCondition + Send) -> Result<Vec<Self::Model>, DbErr>;
+
+    async fn delete_by_id(&self, id: Self::Id) -> Result<(), DbErr>;
 }
